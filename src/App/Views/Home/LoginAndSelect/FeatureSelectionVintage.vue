@@ -1,5 +1,5 @@
 <template>
-  <n-divider title-placement="left">Vintage Feature Selection</n-divider>
+  <n-divider title-placement="left">Feature Selection</n-divider>
   <n-space :size="10">
 
     <!-- Feature Select Buttons -->

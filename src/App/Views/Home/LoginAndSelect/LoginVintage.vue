@@ -10,7 +10,7 @@
     <n-checkbox v-model:checked="rememberMe">Remember me</n-checkbox>
 
     <n-button type="tertiary" :ghost="false" class="feature-button"
-      :class="{ 'highlight-active': app$.ActiveFeature === 'test-user-login' }"
+      :class="{ 'highlight-active': app$.ActiveFeature === 'your-new-feature' }"
       @click="handleLogin" :disabled="!canLogin">
       <template v-if="vintageApi$.loginLoading">
         <n-spin size="small" />
@@ -24,7 +24,12 @@
       {{ vintageApi$.loginError }}
     </n-alert>
 
-    <ul class="info-list">
+    <n-divider title-placement="left">User State</n-divider>
+
+    <ul class="info-list" v-if="!vintageApi$.isLoggedIn">
+      <li>Session: {{ vintageApi$.isLoggedIn ? 'Active' : 'Not logged in' }}</li>
+    </ul>
+    <ul class="info-list" v-if="vintageApi$.isLoggedIn">
       <li>Environment: {{ vintageApi$.environment || 'Not loaded' }}</li>
       <li>Session: {{ vintageApi$.isLoggedIn ? 'Active' : 'Not logged in' }}</li>
       <li v-if="vintageApi$.sessionInfo">Company: {{ vintageApi$.tenantName || 'N/A' }}</li>
@@ -32,9 +37,9 @@
       <li v-if="vintageApi$.lastLoginSuccess">Logged in: {{ new Date(vintageApi$.lastLoginSuccess).toLocaleString() }}</li>
     </ul>
 
+    <n-text v-if="!vintageApi$.isLoggedIn" class="text-sm">Features available after login.</n-text>
     <template v-if="vintageApi$.isLoggedIn">
       <n-divider />
-      <n-text class="text-sm">Contact Importer features available after login.</n-text>
       <VintageFeatureSelection />
     </template>
   </n-flex>
