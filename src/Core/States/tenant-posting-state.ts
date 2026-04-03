@@ -67,10 +67,16 @@ export const useTenantPostingState = defineStore("TenantPostingState", () => {
         return result;
       }
 
+      // Step 4: Verify note was posted by fetching all notes
+      const notes = await client.getImplementationNotes();
+      const recentNote = notes.find(n => n.body.includes(html.substring(0, 50)));
+
       const result: PostingResult = {
         tenantId,
         success: true,
-        message: 'Note posted successfully',
+        message: recentNote
+          ? `Note posted and verified (${notes.length} total notes)`
+          : `Note posted (${notes.length} total notes, verification inconclusive)`,
       };
       lastResult.value = result;
       return result;

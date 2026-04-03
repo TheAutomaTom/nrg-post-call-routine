@@ -19,6 +19,7 @@ export const useTenantUpdateState = defineStore("TenantUpdateState", () => {
         updatedAt: record?.updatedAt ?? null,
         notesPending: record?.notesPending ?? 0,
         tasksPending: record?.tasksPending ?? 0,
+        noteStatus: record?.noteStatus ?? 'neutral',
       } as TenantUpdateRecord;
     });
   });
@@ -52,7 +53,20 @@ export const useTenantUpdateState = defineStore("TenantUpdateState", () => {
       updatedAt: null,
       notesPending: 0,
       tasksPending: 0,
+      noteStatus: 'neutral',
     };
+  };
+
+  const setNoteStatus = (tenantId: string, status: 'neutral' | 'verified' | 'failed') => {
+    const record = records.value.get(tenantId) ?? createEmptyRecord(tenantId);
+    record.noteStatus = status;
+    records.value.set(tenantId, record);
+  };
+
+  const clearAllStatuses = () => {
+    records.value.forEach((record) => {
+      record.noteStatus = 'neutral';
+    });
   };
 
   const reset = () => {
@@ -70,6 +84,8 @@ export const useTenantUpdateState = defineStore("TenantUpdateState", () => {
     addNote,
     addTask,
     markUpdated,
+    setNoteStatus,
+    clearAllStatuses,
     reset,
   };
 });

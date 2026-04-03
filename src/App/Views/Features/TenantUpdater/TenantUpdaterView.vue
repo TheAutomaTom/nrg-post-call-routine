@@ -2,6 +2,9 @@
   <div class="tenant-update-container">
     <n-space justify="space-between" align="center" style="margin-bottom: 0.5rem;">
       <h3 style="margin: 0;">Tenant Update</h3>
+      <n-button size="tiny" quaternary @click="tenantUpdate$.clearAllStatuses()" title="Clear all statuses">
+        🔄 Clear Status
+      </n-button>
     </n-space>
 
     <n-data-table
@@ -51,14 +54,24 @@ const handleNoteSave = async (tenantId: string, html: string) => {
   if (result.success) {
     message.success(result.message);
     tenantUpdate$.addNote(tenantId);
+    tenantUpdate$.setNoteStatus(tenantId, result.message.includes('verified') ? 'verified' : 'neutral');
   } else {
     message.error(result.message);
+    tenantUpdate$.setNoteStatus(tenantId, 'failed');
   }
 };
 
 const formatDate = (dateStr: string | null) => {
   if (!dateStr) return '—';
   return new Date(dateStr).toLocaleDateString();
+};
+
+const statusEmoji = (status: string) => {
+  switch (status) {
+    case 'verified': return '✅';
+    case 'failed': return '❌';
+    default: return '—';
+  }
 };
 
 const columns: DataTableColumns<TenantUpdateRecord> = [
@@ -91,12 +104,11 @@ const columns: DataTableColumns<TenantUpdateRecord> = [
     },
   },
   {
-    title: '#',
-    key: 'notesPending',
+    title: '✓',
+    key: 'noteStatus',
     width: 40,
     align: 'center',
-    sorter: (a, b) => a.notesPending - b.notesPending,
-    render: (row) => row.notesPending || '—',
+    render: (row) => statusEmoji(row.noteStatus),
   },
   {
     title: 'Task',
