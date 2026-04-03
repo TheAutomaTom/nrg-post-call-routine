@@ -50,6 +50,7 @@ import { useModalState } from '@/Core/States/modal-state';
 import { useTenantAuthState } from '@/Core/States/tenant-auth-state';
 import { TenantInfoCache } from '@/Data/Caches/App/TenantInfoCache';
 import { TenantAuthCache } from '@/Data/Caches/Features/TenantAuthCache';
+import { StringEncryptor } from '@/Core/Features/StringEncryptor';
 
 
 const app$ = useAppState();
@@ -82,12 +83,18 @@ const handleNewGame = () => {
  * Build a backup payload containing all cached data
  */
 function buildBackupPayload() {
+  // Encrypt credentials for backup
+  const encryptedCredentials = tenantAuth$.credentials.map(c => ({
+    id: c.id,
+    name: StringEncryptor.encrypt(c.name),
+    password: StringEncryptor.encrypt(c.password),
+  }));
+
   const payload = {
     version: 2,
     exportedAt: new Date().toISOString(),
     data: {
       tenantInfo: TenantInfoCache.load(),
-      tenantAuthCredentials: TenantAuthCache.load(),
     },
     stores: {
       app: {
@@ -99,7 +106,7 @@ function buildBackupPayload() {
         IsActive: modal$.IsActive,
       },
       tenantAuth: {
-        credentials: tenantAuth$.credentials,
+        credentials: encryptedCredentials,
       },
     },
   };
@@ -183,10 +190,15 @@ async function importData() {
         }
       }
 
-      // Restore TenantAuth state
+      // Restore TenantAuth state (decrypt on import)
       if (stores.tenantAuth?.credentials) {
-        tenantAuth$.credentials = stores.tenantAuth.credentials;
-        TenantAuthCache.save(stores.tenantAuth.credentials);
+        const decryptedCredentials = stores.tenantAuth.credentials.map((c: { id: string; name: string; password: string }) => ({
+          id: c.id,
+          name: StringEncryptor.isEncrypted(c.name) ? StringEncryptor.decrypt(c.name) : c.name,
+          password: StringEncryptor.isEncrypted(c.password) ? StringEncryptor.decrypt(c.password) : c.password,
+        }));
+        tenantAuth$.credentials = decryptedCredentials;
+        TenantAuthCache.save(decryptedCredentials);
       }
 
     }

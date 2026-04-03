@@ -1,4 +1,5 @@
 import type { TenantCredential } from "@/Core/Models/tenant-auth/TenantAuthModel";
+import { StringEncryptor } from "@/Core/Features/StringEncryptor";
 
 export class TenantAuthCache {
   private static readonly STORAGE_KEY = "nrg-frontline-tenant-auth-credentials";
@@ -6,7 +7,13 @@ export class TenantAuthCache {
 
   static save(credentials: TenantCredential[]): void {
     try {
-      localStorage.setItem(this.STORAGE_KEY, JSON.stringify(credentials));
+      // Encrypt names and passwords before storing
+      const encrypted = credentials.map(c => ({
+        id: c.id,
+        name: StringEncryptor.encrypt(c.name),
+        password: StringEncryptor.encrypt(c.password),
+      }));
+      localStorage.setItem(this.STORAGE_KEY, JSON.stringify(encrypted));
       localStorage.setItem(this.TIMESTAMP_KEY, new Date().toISOString());
     } catch (error) {
       console.warn("[TenantAuthCache] Failed to save:", error);
@@ -16,7 +23,14 @@ export class TenantAuthCache {
   static load(): TenantCredential[] {
     try {
       const data = localStorage.getItem(this.STORAGE_KEY);
-      return data ? JSON.parse(data) : [];
+      if (!data) return [];
+      const stored: TenantCredential[] = JSON.parse(data);
+      // Decrypt names and passwords on load
+      return stored.map(c => ({
+        id: c.id,
+        name: StringEncryptor.decrypt(c.name),
+        password: StringEncryptor.decrypt(c.password),
+      }));
     } catch {
       return [];
     }
