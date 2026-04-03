@@ -1,0 +1,13 @@
+name = "nrg-post-call-routine"
+main = "cloudflare/worker.js"
+compatibility_date = "2025-01-01"
+
+# Serve built PWA assets from dist/
+[assets]
+directory = "./dist"
+binding = "ASSETS"
+
+# Optional: configure routes if you have a custom domain
+# routes = [
+#   { pattern = "yourdomain.com/*", zone_name = "yourdomain.com" }
+# ]

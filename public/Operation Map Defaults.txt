@@ -1,0 +1,31 @@
+LABOR-TO-OPERATION MAP DEFAULTS
+  ================================================================================
+  - WORK ORDER TYPE --------------------------------------------------------------
+      DEFAULT LABOR Items                | A DEFAULT OPERATION
+                                         |
+  - Drafting Work Orders ----------------+----------------------------------------
+      Drafting - Submittals              | 0.800.09 Drafting - Sink Face
+                                         |
+  - Production Work Orders --------------+----------------------------------------
+      Casegoods Assembly                 | 4.291 Add Nth Drawer Assembly To Cab
+      Countertop Fabrication             | 5.305 Countertop Cove Intersection
+      Custom Fabrication                 | 7.603 Add Support Post
+      Engineering                        | 0.810.04 Engineering - Cabinet Door
+      Finishing                          | 0.700 Finishing Labor - 1 Hr
+      Load & Delivery                    | 0.906 Unload Labor - 1 Hr
+      Machine Center                     | 0.900 Handling - Panel Piece
+      Millwork                           | 1.614 Fabricate XL Hdwd Panel Door
+      Project Management                 | 0.800 PM Labor - 1 Hr
+      S&R Door Fabrication               | 10.00.04 4-Panel Door Assembly
+      Solid Surface Fabrication          | 6.501 SSM Lav - Drop In
+      Installation                       | i6.206 Install Loose SSM Splash <= 72"
+                                         |
+  - Installation Work Orders ------------+----------------------------------------
+      Supervision                        | 0.801 Supervision Labor - 1 Hr
+                                         |
+  ================================================================================
+  Note: Use this as a reference when manually mapping 
+        custom named Labor Items to default Operations.  
+
+        For out-of-the-box mappings, use the "Apply Defaults" button 
+        at the Labor Configuration page. 

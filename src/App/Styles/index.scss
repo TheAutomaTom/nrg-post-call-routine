@@ -1,0 +1,94 @@
+@use "./theme" as *;
+@use "./scrollbar" as *;
+
+html,
+body,
+#app {
+  height: 100%;
+  margin: 0;
+  background-color: var(--color-bg-dark);
+  color: var(--color-text-light);
+  font-family: system-ui, sans-serif;
+  overflow-x: hidden; // prevent page-wide horizontal bars
+}
+
+/* —— Loading State —— */
+.app-layout.is-loading {
+  cursor: wait !important;
+}
+
+.app-layout.is-loading * {
+  cursor: wait !important;
+}
+
+/* —— Layout —— */
+.n-layout-header {
+  padding: var(--padding-primary-y) var(--padding-primary-x);
+}
+
+.app-layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
+  padding: var(--padding-primary-y) var(--padding-primary-x);
+}
+
+.app-content {
+  flex: 1 1 auto;
+  overflow: auto;
+  padding-bottom: var(--footer-height); // reserve space for fixed footer
+}
+
+/* —— Footer —— */
+.app-footer {
+  z-index: 1000;
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: var(--footer-height);
+  display: flex;
+  align-items: stretch;
+  overflow: hidden;
+  // padding-bottom: env(safe-area-inset-bottom);
+
+  // &:hover .footer-scroll {
+  //   opacity: 10;
+  // }
+}
+
+.footer-scroll {
+  width: 100%;
+  height: 100%;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+}
+
+.footer-rail {
+  display: flex;
+  height: 100%;
+  align-items: center;
+  gap: var(--gap-typical);
+  padding: var(--gap-typical) var(--gap-typical-x);
+  min-width: max-content; // force horizontal overflow so it can scroll
+}
+
+.n-button {
+  // color: var(--color-primary);
+  // margin-bottom: 0.75em;
+
+  // :hover {
+  //   color: red;
+  // }
+  // :active {
+  //   color: green;
+  // }
+}
+
+// .n-button__content {
+//   color: #c08bf1;
+// }
+
+// .footer-button :hover {
+//   color: red;
+// }

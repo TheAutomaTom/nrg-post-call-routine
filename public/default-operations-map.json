@@ -1,0 +1,77 @@
+[
+  {
+    "isEnabled": true,
+    "laborItemName": "Casegoods Assembly",
+    "operationName": "4.291 Add Nth Drawer Assembly To Cab"
+  },
+  {
+    "isEnabled": true,
+    "laborItemName": "Countertop Fabrication",
+    "operationName": "5.305 Countertop Cove Intersection"
+  },
+  {
+    "isEnabled": true,
+    "laborItemName": "Custom Fabrication",
+    "operationName": "7.603 Add Support Post"
+  },
+  {
+    "isEnabled": true,
+    "laborItemName": "Drafting - Submittals",
+    "operationName": "0.800.09 Drafting - Sink Face"
+  },
+  {
+    "isEnabled": true,
+    "laborItemName": "Engineering",
+    "operationName": "0.810.04 Engineering - Cabinet Door"
+  },
+  {
+    "isEnabled": true,
+    "laborItemName": "Finishing",
+    "operationName": "0.700 Finishing Labor - 1 Hr"
+  },
+  {
+    "isEnabled": true,
+    "laborItemName": "Installation",
+    "operationName": "i6.206 Install Loose SSM Splash <= 72\""
+  },
+  {
+    "isEnabled": true,
+    "laborItemName": "Load & Delivery",
+    "operationName": "0.906 Unload Labor - 1 Hr"
+  },
+  {
+    "isEnabled": true,
+    "laborItemName": "Load & Delivery",
+    "operationName": "0.906  Unload Labor - 1 Hr"
+  },
+  {
+    "isEnabled": true,
+    "laborItemName": "Machine Center",
+    "operationName": "0.900 Handling - Panel Piece"
+  },
+  {
+    "isEnabled": true,
+    "laborItemName": "Millwork",
+    "operationName": "1.614 Fabricate XL Hdwd Panel Door"
+  },
+  {
+    "isEnabled": true,
+    "laborItemName": "Project Management",
+    "operationName": "0.800 PM Labor - 1 Hr"
+  },
+  {
+    "isEnabled": true,
+    "laborItemName": "S&R Door Fabrication",
+    "operationName": "10.00.04 4-Panel Door Assembly"
+  },
+  {
+    "isEnabled": true,
+    "laborItemName": "Solid Surface Fabrication",
+    "operationName": "6.501 SSM Lav - Drop In"
+  },
+  {
+    "isEnabled": true,
+    "laborItemName": "Supervision",
+    "operationName": "0.801 Supervision Labor - 1 Hr"
+  }
+]

@@ -1,0 +1,184 @@
+// define all theme values here
+$primary-color: #b96fe2;
+$secondary-color: #64748b;
+$background-dark: #121212;
+$text-light: #f1f5f9;
+$highlight-color: #ccccff; // periwinkle
+$highlight-vibrant: #9999ff; // vibrant periwinkle
+$highlight-extra-vibrant: #8888ff; // extra vibrant periwinkle
+$primary-padding-y: 0.1rem;
+$primary-padding-x: 1rem;
+$gap-typical: 6px;
+$gap-typical-x: 12px;
+
+$pill-bg-ok: #c7fac8;
+$pill-text-ok: #0f4820;
+
+// Status colors
+$status-loading: #ffd666;
+$status-success: #4ade80;
+$status-error: #ff6b6b;
+$status-idle: #9ca3af;
+
+:root {
+  --color-primary: #{$primary-color};
+  --color-secondary: #{$secondary-color};
+  --color-bg-dark: #{$background-dark};
+  --color-text-light: #{$text-light};
+  --color-highlight: #{$highlight-color};
+  --color-highlight-vibrant: #{$highlight-vibrant};
+  --color-highlight-extra-vibrant: #{$highlight-extra-vibrant};
+  --padding-primary-y: #{$primary-padding-y};
+  --padding-primary-x: #{$primary-padding-x};
+  --gap-typical: #{$gap-typical};
+  --gap-typical-x: #{$gap-typical-x};
+  --footer-height: 3.5rem;
+
+  --pill-bg-ok: #{$pill-bg-ok};
+  --pill-text-ok: #{$pill-text-ok};
+
+  --status-loading: #{$status-loading};
+  --status-success: #{$status-success};
+  --status-error: #{$status-error};
+  --status-idle: #{$status-idle};
+}
+
+/* —— Reusable Component Patterns —— */
+
+// Status indicators
+.status-indicator {
+  font-size: 0.95rem;
+  line-height: 1;
+  display: inline-block;
+  width: 100%;
+  text-align: center;
+
+  &.loading {
+    color: var(--status-loading);
+  }
+  &.success {
+    color: var(--status-success);
+  }
+  &.error {
+    color: var(--status-error);
+  }
+  &.idle {
+    color: var(--status-idle);
+  }
+}
+
+// Status pill (for work order steps, etc.)
+.status-pill {
+  background: var(--pill-bg-ok);
+  color: var(--pill-text-ok);
+  padding: 0.15rem 0.4rem 0.25rem 0.4rem;
+  border-radius: 4px;
+  font-size: 0.7rem;
+  margin-left: 0.5rem;
+  font-weight: normal;
+}
+
+// Info box pattern (cache info, notifications, etc.)
+.info-box {
+  padding: 0.5rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 4px;
+  margin-top: 0.5rem;
+}
+
+// Filter group pattern
+.filter-group {
+  padding: 0.35rem 0.25rem 0.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+
+  &:last-of-type {
+    border-bottom: none;
+  }
+
+  h4 {
+    margin: 0 0 0.25rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    opacity: 0.85;
+  }
+}
+
+/* —— Responsive Utilities —— */
+@media (max-width: 767px) {
+  .hide-on-mobile {
+    display: none;
+  }
+}
+
+/* —— Spacing Utilities —— */
+.ml-sm {
+  margin-left: 0.5rem;
+}
+
+.py-sm {
+  padding: 0.5rem 0;
+}
+
+/* —— Typography Utilities —— */
+.text-xs {
+  font-size: 0.65rem;
+}
+
+.text-sm {
+  font-size: 0.7rem;
+}
+
+.text-muted {
+  opacity: 0.7;
+}
+
+/* —— Compound Utilities —— */
+.unavailable-notice {
+  margin-top: 0.5rem;
+  font-size: 0.65rem;
+  opacity: 0.7;
+}
+
+.info-list {
+  margin: 0.5rem 0 0;
+  padding-left: 1.25rem;
+}
+
+.text-sm {
+  font-size: 12px;
+}
+
+.periwinkle-link {
+  color: var(--color-highlight-vibrant);
+  text-decoration: underline;
+}
+
+.feature-button {
+  min-width: 140px;
+}
+
+/* —— Button Highlight States —— */
+.highlight-active .n-button__border,
+.highlight-active .n-button__state-border {
+  border-color: var(--color-highlight-vibrant) !important;
+}
+
+.highlight-active .n-button__content {
+  color: var(--color-highlight-vibrant) !important;
+}
+
+.highlight-active-2:is(:hover, :focus, :focus-visible, :active) .n-button {
+  background-color: var(--color-highlight-vibrant) !important;
+}
+
+.highlight-active-2:is(:hover, :focus, :focus-visible, :active)
+  .n-button__border,
+.highlight-active-2:is(:hover, :focus, :focus-visible, :active)
+  .n-button__state-border {
+  border-color: var(--color-highlight-vibrant) !important;
+}
+
+.highlight-active-2:is(:hover, :focus, :focus-visible, :active)
+  .n-button__content {
+  color: var(--color-highlight-vibrant) !important;
+}
