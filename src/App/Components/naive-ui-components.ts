@@ -36,7 +36,11 @@ import {
   NButtonGroup,
   NUpload,
   NTabPane,
-  NTabs
+  NTabs,
+  NForm,
+  NFormItem,
+  NDataTable
+
 } from "naive-ui";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -75,7 +79,10 @@ export const naiveUiComponents: Array<{ component: any; name: string }> = [
   { component: NButtonGroup, name: "n-button-group" },
   { component: NUpload, name: "n-upload" },
   { component: NTabPane, name: "n-tab-pane" },
-  { component: NTabs, name: "n-tabs" }
+  { component: NTabs, name: "n-tabs" },
+  { component: NForm, name: "n-form" },
+  { component: NFormItem, name: "n-form-item" },
+  { component: NDataTable, name: "n-data-table" },
 ];
 
 export const naiveConfig = {

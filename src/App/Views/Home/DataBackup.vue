@@ -34,10 +34,9 @@
 
     <n-divider title-placement="left">Current Snapshot Contents</n-divider>
     <ul class="summary">
-      <li>Pli Version: 251210-1650</li>
-      <li>Company: {{ app$.ApiUserConfig.UserEmail }}</li>
+      <li>Frontline Version: 260403-1227</li>
       <li>Server Version: {{ serverVersion || 'Not fetched' }}</li>
-      <li>Contacts: {{ contactImporter$.contacts.length }} imported</li>
+      <li>Tenant Auth: {{ tenantAuth$.count }} credential(s)</li>
     </ul>
 
   </div>
@@ -48,11 +47,14 @@
 import { ref,  onMounted } from 'vue';
 import { useAppState } from '@/Core/States/app-state';
 import { useModalState } from '@/Core/States/modal-state';
+import { useTenantAuthState } from '@/Core/States/tenant-auth-state';
 import { TenantInfoCache } from '@/Data/Caches/App/TenantInfoCache';
+import { TenantAuthCache } from '@/Data/Caches/Features/TenantAuthCache';
 
 
 const app$ = useAppState();
 const modal$ = useModalState();
+const tenantAuth$ = useTenantAuthState();
 
 const fileInput = ref<HTMLInputElement | null>(null);
 const selectedFile = ref<File | undefined>(undefined);
@@ -69,6 +71,8 @@ const handleNewGame = () => {
     cancelText: 'Cancel',
     confirmType: 'warning',
     onConfirm: () => {
+      // Clear TenantAuth
+      tenantAuth$.reset();
       app$.setAppStatus('success', 'Local data reset.');
     },
   });
@@ -83,6 +87,7 @@ function buildBackupPayload() {
     exportedAt: new Date().toISOString(),
     data: {
       tenantInfo: TenantInfoCache.load(),
+      tenantAuthCredentials: TenantAuthCache.load(),
     },
     stores: {
       app: {
@@ -92,6 +97,9 @@ function buildBackupPayload() {
       },
       modal: {
         IsActive: modal$.IsActive,
+      },
+      tenantAuth: {
+        credentials: tenantAuth$.credentials,
       },
     },
   };
@@ -175,6 +183,11 @@ async function importData() {
         }
       }
 
+      // Restore TenantAuth state
+      if (stores.tenantAuth?.credentials) {
+        tenantAuth$.credentials = stores.tenantAuth.credentials;
+        TenantAuthCache.save(stores.tenantAuth.credentials);
+      }
 
     }
 

@@ -7,6 +7,11 @@
       :class="{ 'highlight-active': app$.ActiveFeature === 'your-new-feature' }" @click="onLoadYourNewFeature">
       Your New Feature
     </n-button>
+
+    <n-button type="tertiary" :ghost="false" class="feature-button"
+      :class="{ 'highlight-active': app$.ActiveFeature === 'tenant-auth' }" @click="onLoadTenantAuth">
+      🔐 Tenant Auth
+    </n-button>
     <!--  -->
 
   </n-space>
@@ -14,14 +19,19 @@
 
 <script setup lang="ts">
 import { useAppState } from '@/Core/States/app-state';
-// import { useRouter } from 'vue-router';
+import { useRouter } from 'vue-router';
 
 const app$ = useAppState();
-// const router = useRouter();
+const router = useRouter();
 
 const onLoadYourNewFeature = async () => {
   app$.setActiveFeature('your-new-feature');
   // router.push({ name: 'your-new-feature-route' });
+};
+
+const onLoadTenantAuth = async () => {
+  app$.setActiveFeature('tenant-auth');
+  router.push({ name: 'tenant-auth-main' });
 };
 </script>
 

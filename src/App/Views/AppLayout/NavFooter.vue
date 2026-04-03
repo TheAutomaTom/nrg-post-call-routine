@@ -14,6 +14,9 @@
 
         </template>
 
+        <TenantAuthFooterButtons
+          v-if="app$.ActiveFeature === 'tenant-auth' || (app$.ActiveFeature === null && isTenantAuth)" />
+
         <!-- ==== Right Justified ======================================================================= -->
       </div>
       <n-button class="footer-button status-square" size="small" tertiary @click="goTo('data-backup')"
@@ -41,6 +44,7 @@ import { useVintageAuthState } from '@/Core/States/nrg-vintage-auth';
 import { computed } from 'vue';
 import type { AppStatusKind } from '@/Core/Models/infra/AppStatus';
 import { APP_STATUS_GLYPHS } from '@/Core/Models/infra/AppStatus';
+import TenantAuthFooterButtons from '../Features/TenantAuth/TenantAuthFooterButtons.vue';
 
 const app$ = useAppState();
 const vintageApi$ = useVintageAuthState();
@@ -48,6 +52,11 @@ const router = useRouter();
 const route = useRoute();
 
 const routeName = computed(() => route?.name);
+
+const isTenantAuth = computed(() => {
+  const name = routeName.value as string;
+  return name === 'tenant-auth-main' || name?.startsWith('tenant-auth-');
+});
 
 // const isNewFeatureStub = computed(() => {
 //   const name = routeName.value as string;

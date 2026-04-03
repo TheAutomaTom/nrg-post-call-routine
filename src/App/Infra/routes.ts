@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from "vue-router";
 import { useAppState } from "@/Core/States/app-state";
 import LoginAndSelect from "@/App/Views/Home/LoginAndSelect.vue";
 import DataBackup from "@/App/Views/Home/DataBackup.vue";
+import TenantAuthMainView from "@/App/Views/Features/TenantAuth/TenantAuthMainView.vue";
 
 
 const routes = [
@@ -14,6 +15,11 @@ const routes = [
     path: "/data-backup",
     name: "data-backup",
     component: DataBackup,
+  },
+  {
+    path: "/tenant-auth",
+    name: "tenant-auth-main",
+    component: TenantAuthMainView,
   }
 ];
 
