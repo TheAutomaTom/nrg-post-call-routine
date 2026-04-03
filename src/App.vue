@@ -1,8 +1,8 @@
 <template>
   <n-config-provider :theme="darkTheme" :theme-overrides="themeOverrides">
-
-    <n-modal-provider>
-      <n-layout :class="['app-layout', { 'is-loading': app$.IsLoading }]">
+    <n-message-provider>
+      <n-modal-provider>
+        <n-layout :class="['app-layout', { 'is-loading': app$.IsLoading }]">
         <n-layout-content class="app-content">
 
           <n-modal v-model:show="app$.IsModalOpen" preset="card" :title="modalTitle" size="small" :style="modalStyle"
@@ -31,6 +31,7 @@
         </n-layout-footer>
       </n-layout>
     </n-modal-provider>
+    </n-message-provider>
   </n-config-provider>
 </template>
 

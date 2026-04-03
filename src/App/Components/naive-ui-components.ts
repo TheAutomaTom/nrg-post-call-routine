@@ -39,7 +39,8 @@ import {
   NTabs,
   NForm,
   NFormItem,
-  NDataTable
+  NDataTable,
+  NMessageProvider
 
 } from "naive-ui";
 
@@ -83,6 +84,8 @@ export const naiveUiComponents: Array<{ component: any; name: string }> = [
   { component: NForm, name: "n-form" },
   { component: NFormItem, name: "n-form-item" },
   { component: NDataTable, name: "n-data-table" },
+  { component: NMessageProvider, name: "n-message-provider" },
+
 ];
 
 export const naiveConfig = {
