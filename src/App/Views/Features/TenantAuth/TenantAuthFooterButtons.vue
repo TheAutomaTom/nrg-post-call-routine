@@ -1,5 +1,5 @@
 <template>
-  <div class="tenant-auth-footer">
+  <div class="tenant-footer">
     <n-button
       class="footer-button"
       :class="{ 'highlight-active': isTenantAuthRoute }"
@@ -7,7 +7,16 @@
       @click="goToTenantAuth"
       aria-label="Tenant Auth">
       <span class="icon">🔐</span>
-      <span class="label hide-on-mobile">Tenant Auth</span>
+      <span class="label hide-on-mobile">Auth</span>
+    </n-button>
+    <n-button
+      class="footer-button"
+      :class="{ 'highlight-active': isTenantUpdateRoute }"
+      size="small"
+      @click="goToTenantUpdate"
+      aria-label="Tenant Update">
+      <span class="icon">🔄</span>
+      <span class="label hide-on-mobile">Update</span>
     </n-button>
   </div>
 </template>
@@ -25,11 +34,16 @@ const isTenantAuthRoute = computed(() => {
   return routeName.value === 'tenant-auth-main' || routeName.value?.startsWith('tenant-auth-');
 });
 
+const isTenantUpdateRoute = computed(() => {
+  return routeName.value === 'tenant-update-main' || routeName.value?.startsWith('tenant-update-');
+});
+
 const goToTenantAuth = () => router.push({ name: 'tenant-auth-main' });
+const goToTenantUpdate = () => router.push({ name: 'tenant-update-main' });
 </script>
 
 <style scoped>
-.tenant-auth-footer {
+.tenant-footer {
   display: flex;
   gap: 0.5rem;
   align-items: center;

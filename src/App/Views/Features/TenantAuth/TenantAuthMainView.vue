@@ -51,7 +51,12 @@ const editingId = ref<string | null>(null);
 const formData = reactive({ name: '', password: '' });
 
 const columns: DataTableColumns<TenantCredential> = [
-  { title: 'Name', key: 'name', ellipsis: { tooltip: true } },
+  {
+    title: 'Name',
+    key: 'name',
+    sorter: (a, b) => a.name.localeCompare(b.name),
+    ellipsis: { tooltip: true },
+  },
   {
     title: 'Password',
     key: 'password',
@@ -79,7 +84,7 @@ const columns: DataTableColumns<TenantCredential> = [
 ];
 
 onMounted(() => {
-  app$.setActiveFeature('tenant-auth');
+  app$.setActiveFeature('tenant');
 });
 
 const openAddModal = () => {

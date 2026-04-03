@@ -9,8 +9,8 @@
     </n-button>
 
     <n-button type="tertiary" :ghost="false" class="feature-button"
-      :class="{ 'highlight-active': app$.ActiveFeature === 'tenant-auth' }" @click="onLoadTenantAuth">
-      🔐 Tenant Auth
+      :class="{ 'highlight-active': app$.ActiveFeature === 'tenant' }" @click="onLoadTenant">
+      🏢 Post Call Updater
     </n-button>
     <!--  -->
 
@@ -29,8 +29,8 @@ const onLoadYourNewFeature = async () => {
   // router.push({ name: 'your-new-feature-route' });
 };
 
-const onLoadTenantAuth = async () => {
-  app$.setActiveFeature('tenant-auth');
+const onLoadTenant = async () => {
+  app$.setActiveFeature('tenant');
   router.push({ name: 'tenant-auth-main' });
 };
 </script>

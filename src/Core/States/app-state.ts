@@ -59,14 +59,14 @@ export const useAppState = defineStore("AppState", () => {
   // Active feature tracking
   const ActiveFeature = ref<
     | "your-new-feature"
-    | "tenant-auth"
+    | "tenant"
     | null
   >(null);
 
   const setActiveFeature = (
     feature:
       | "your-new-feature"
-      | "tenant-auth"
+      | "tenant"
       | null,
   ) => {
     ActiveFeature.value = feature;

@@ -14,8 +14,8 @@
 
         </template>
 
-        <TenantAuthFooterButtons
-          v-if="app$.ActiveFeature === 'tenant-auth' || (app$.ActiveFeature === null && isTenantAuth)" />
+        <TenantFooterButtons
+          v-if="app$.ActiveFeature === 'tenant' || (app$.ActiveFeature === null && isTenant)" />
 
         <!-- ==== Right Justified ======================================================================= -->
       </div>
@@ -44,7 +44,7 @@ import { useVintageAuthState } from '@/Core/States/nrg-vintage-auth';
 import { computed } from 'vue';
 import type { AppStatusKind } from '@/Core/Models/infra/AppStatus';
 import { APP_STATUS_GLYPHS } from '@/Core/Models/infra/AppStatus';
-import TenantAuthFooterButtons from '../Features/TenantAuth/TenantAuthFooterButtons.vue';
+import TenantFooterButtons from '../Features/TenantAuth/TenantAuthFooterButtons.vue';
 
 const app$ = useAppState();
 const vintageApi$ = useVintageAuthState();
@@ -53,9 +53,10 @@ const route = useRoute();
 
 const routeName = computed(() => route?.name);
 
-const isTenantAuth = computed(() => {
+const isTenant = computed(() => {
   const name = routeName.value as string;
-  return name === 'tenant-auth-main' || name?.startsWith('tenant-auth-');
+  return name === 'tenant-auth-main' || name?.startsWith('tenant-auth-') ||
+         name === 'tenant-update-main' || name?.startsWith('tenant-update-');
 });
 
 // const isNewFeatureStub = computed(() => {
