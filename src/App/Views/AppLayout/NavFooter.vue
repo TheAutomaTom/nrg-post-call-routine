@@ -44,7 +44,7 @@ import { useVintageAuthState } from '@/Core/States/nrg-vintage-auth';
 import { computed } from 'vue';
 import type { AppStatusKind } from '@/Core/Models/infra/AppStatus';
 import { APP_STATUS_GLYPHS } from '@/Core/Models/infra/AppStatus';
-import TenantFooterButtons from '../Features/TenantAuth/TenantAuthFooterButtons.vue';
+import TenantFooterButtons from '../Features/TenantUpdater/TenantAuthFooterButtons.vue';
 
 const app$ = useAppState();
 const vintageApi$ = useVintageAuthState();

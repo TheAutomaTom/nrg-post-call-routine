@@ -2,8 +2,8 @@ import { createRouter, createWebHistory } from "vue-router";
 import { useAppState } from "@/Core/States/app-state";
 import LoginAndSelect from "@/App/Views/Home/LoginAndSelect.vue";
 import DataBackup from "@/App/Views/Home/DataBackup.vue";
-import TenantAuthMainView from "@/App/Views/Features/TenantAuth/TenantAuthMainView.vue";
-import TenantUpdateMainView from "@/App/Views/Features/TenantUpdate/TenantUpdateMainView.vue";
+import TenantAuthMainView from "@/App/Views/Features/TenantUpdater/TenantAuthView.vue";
+import TenantUpdateMainView from "@/App/Views/Features/TenantUpdater/TenantUpdaterView.vue";
 
 
 const routes = [

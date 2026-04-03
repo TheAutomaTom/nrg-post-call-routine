@@ -3,14 +3,10 @@
   <n-space :size="10">
 
     <!-- Feature Select Buttons -->
-    <n-button type="tertiary" :ghost="false" class="feature-button"
-      :class="{ 'highlight-active': app$.ActiveFeature === 'your-new-feature' }" @click="onLoadYourNewFeature">
-      Your New Feature
-    </n-button>
 
     <n-button type="tertiary" :ghost="false" class="feature-button"
       :class="{ 'highlight-active': app$.ActiveFeature === 'tenant' }" @click="onLoadTenant">
-      🏢 Post Call Updater
+      🛠️ Post Call Updater
     </n-button>
     <!--  -->
 
