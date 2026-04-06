@@ -15,6 +15,17 @@ export default defineConfig({
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/proxy/, ""),
         secure: true,
+        cookieDomainRewrite: "",
+        configure: (proxy) => {
+          proxy.on('proxyRes', (proxyRes) => {
+            const sc = proxyRes.headers['set-cookie'];
+            if (sc) {
+              proxyRes.headers['set-cookie'] = sc.map((c) =>
+                c.replace(/;\s*secure/gi, '')
+              );
+            }
+          });
+        },
       },
     },
   },

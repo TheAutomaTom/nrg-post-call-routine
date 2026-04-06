@@ -101,7 +101,8 @@ export class NrgVintageCalls {
     }
 
     if (!response.ok) {
-      throw new Error(`GET ${url} failed: ${response.status} ${response.statusText}`);
+      const errorBody = await response.text().catch(() => '');
+      throw new Error(`GET ${url} failed: ${response.status} ${response.statusText} — ${errorBody}`);
     }
 
     return await response.json() as T;
@@ -135,7 +136,10 @@ export class NrgVintageCalls {
     }
 
     if (!response.ok) {
-      throw new Error(`POST ${url} failed: ${response.status} ${response.statusText}`);
+      const errorBody = await response.text().catch(() => '');
+      console.error(`[NrgVintageCalls] POST ${url} → ${response.status}`, errorBody);
+      console.error(`[NrgVintageCalls] Request body was:`, JSON.stringify(body));
+      throw new Error(`POST ${url} failed: ${response.status} ${response.statusText} — ${errorBody}`);
     }
 
     return await response.json() as T;
