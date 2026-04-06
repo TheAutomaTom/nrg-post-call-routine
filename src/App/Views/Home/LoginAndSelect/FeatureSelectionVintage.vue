@@ -15,6 +15,7 @@
 
 <script setup lang="ts">
 import { useAppState } from '@/Core/States/app-state';
+import { onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 
 const app$ = useAppState();
@@ -29,6 +30,12 @@ const onLoadTenant = async () => {
   app$.setActiveFeature('tenant');
   router.push({ name: 'tenant-auth-main' });
 };
+
+onMounted(() => {
+  app$.ActiveFeature = 'tenant';
+    router.push({ name: 'tenant-auth-main' });
+
+});
 </script>
 
 

@@ -14,9 +14,9 @@
       :class="{ 'highlight-active': isTenantUpdateRoute }"
       size="small"
       @click="goToTenantUpdate"
-      aria-label="Tenant Update">
+      aria-label="Tenant Updater">
       <span class="icon">🔄</span>
-      <span class="label hide-on-mobile">Update</span>
+      <span class="label hide-on-mobile">Updater</span>
     </n-button>
   </div>
 </template>

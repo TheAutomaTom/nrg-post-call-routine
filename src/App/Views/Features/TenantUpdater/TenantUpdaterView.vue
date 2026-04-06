@@ -1,7 +1,7 @@
 <template>
   <div class="tenant-update-container">
     <n-space justify="space-between" align="center" style="margin-bottom: 0.5rem;">
-      <h3 style="margin: 0;">Tenant Update</h3>
+      <h3 style="margin: 0;">Tenant Updater</h3>
       <n-button size="tiny" quaternary @click="tenantUpdate$.clearAllStatuses()" title="Clear all statuses">
         🔄 Clear Status
       </n-button>

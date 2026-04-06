@@ -2,11 +2,11 @@
   <n-scrollbar :x-scrollable="true" class="footer-scroll">
     <div class="footer-rail">
       <div class="footer-group">
-        <n-button class="footer-button" size="small" @click="goTo('longin-and-select')" aria-label="Refresh"
+        <!-- <n-button class="footer-button" size="small" @click="goTo('longin-and-select')" aria-label="Refresh"
           :class="{ 'highlight-active': routeName === 'longin-and-select' }">
           <span class="icon">☰</span>
           <span class="label hide-on-mobile">Home</span>
-        </n-button>
+        </n-button> -->
 
         <template v-if="vintageApi$.isLoggedIn">
      <!-- <ContactImporterFooterButtons

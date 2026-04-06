@@ -9,6 +9,11 @@ import TenantUpdateMainView from "@/App/Views/Features/TenantUpdater/TenantUpdat
 const routes = [
   {
     path: "/",
+    name: "tenant-update-main",
+    component: TenantUpdateMainView,
+  },
+  {
+    path: "/login",
     name: "longin-and-select",
     component: LoginAndSelect,
   },
@@ -22,11 +27,6 @@ const routes = [
     name: "tenant-auth-main",
     component: TenantAuthMainView,
   },
-  {
-    path: "/tenant-update",
-    name: "tenant-update-main",
-    component: TenantUpdateMainView,
-  }
 ];
 
 export const router = createRouter({
@@ -38,21 +38,7 @@ export const router = createRouter({
 router.beforeEach((to, from, next) => {
   const app$ = useAppState();
   app$.showLoading();
-
-  // Allow help pages and home page to load without redirect
-  if (
-    to.name === "longin-and-select" ||
-    (to.name && typeof to.name === "string" && to.name.startsWith("help-"))
-  ) {
-    next();
-  } else {
-    // For other routes on fresh page load, redirect to home
-    if (from.name === null || from.name === undefined) {
-      next({ name: "longin-and-select" });
-    } else {
-      next();
-    }
-  }
+  next();
 });
 
 router.afterEach(() => {

@@ -177,7 +177,7 @@ export class NrgVintageCalls {
     return await this.post<TenantLoginResult>('/Account/AuthEndpoint/Login', request);
   }
 
-  // ============ Tenant Update API Methods (Stubs) ============
+  // ============ Tenant Updater API Methods (Stubs) ============
 
   /**
    * Run a query against the tenant portal.
