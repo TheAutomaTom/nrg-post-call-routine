@@ -203,8 +203,8 @@ export class NrgVintageCalls {
    * @param tenantId - The UUID of the tenant/company
    * @param body - HTML content of the note
    */
-  async createImplementationNote(tenantId: string, body: string): Promise<CommandResult> {
-    const command = createImplementationNoteCommand(tenantId, body);
+  async createImplementationNote(body: string): Promise<CommandResult> {
+    const command = createImplementationNoteCommand(body);
     return await this.runCommand<CommandResult>(command as unknown as TenantQueryRequest);
   }
 

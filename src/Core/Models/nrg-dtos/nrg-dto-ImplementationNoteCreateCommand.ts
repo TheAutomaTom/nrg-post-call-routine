@@ -2,7 +2,7 @@
 
 export interface ImplementationNoteCreateCommand {
   $type: 'ImplementationNoteCreateCommand';
-  Id: string;       // UUID of the tenant/company
+  Id: string;       // Client-generated UUID for this note
   Body: string;     // HTML content of the note
 }
 
@@ -27,12 +27,11 @@ export interface CommandMessage {
 // ============ Factory Functions ============
 
 export function createImplementationNoteCommand(
-  tenantId: string,
   body: string
 ): ImplementationNoteCreateCommand {
   return {
     $type: 'ImplementationNoteCreateCommand',
-    Id: tenantId,
+    Id: crypto.randomUUID(),
     Body: body,
   };
 }

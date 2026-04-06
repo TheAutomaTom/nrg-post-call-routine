@@ -52,12 +52,11 @@ export const useTenantPostingState = defineStore("TenantPostingState", () => {
         return result;
       }
 
-      // Step 3: Get app profile to retrieve the real innergy user ID (UUID)
-      const profile = await client.getAppProfile();
-      const realTenantId = profile.user.id;
+      // Step 3: Get app profile (validates session is active)
+      await client.getAppProfile();
 
-      // Step 4: Post the note using the real tenant ID from AppProfile
-      const commandResult = await client.createImplementationNote(realTenantId, html);
+      // Step 4: Post the note with a client-generated UUID
+      const commandResult = await client.createImplementationNote(html);
       if (!commandResult.IsSuccess) {
         const errorMsg = commandResult.KeyMessages?.join(', ')
           || commandResult.OutcomeDescription
