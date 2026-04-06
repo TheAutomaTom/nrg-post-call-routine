@@ -38,10 +38,10 @@
     </ul>
 
     <n-text v-if="!vintageApi$.isLoggedIn" class="text-sm">Features available after login.</n-text>
-    <template v-if="vintageApi$.isLoggedIn">
+    <!-- <template v-if="vintageApi$.isLoggedIn"> -->
       <n-divider />
       <VintageFeatureSelection />
-    </template>
+    <!-- </template> -->
   </n-flex>
 </template>
 

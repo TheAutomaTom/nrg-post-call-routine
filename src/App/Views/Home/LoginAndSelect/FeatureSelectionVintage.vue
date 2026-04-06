@@ -20,10 +20,10 @@ import { useRouter } from 'vue-router';
 const app$ = useAppState();
 const router = useRouter();
 
-const onLoadYourNewFeature = async () => {
-  app$.setActiveFeature('your-new-feature');
-  // router.push({ name: 'your-new-feature-route' });
-};
+// const onLoadYourNewFeature = async () => {
+//   app$.setActiveFeature('your-new-feature');
+//   // router.push({ name: 'your-new-feature-route' });
+// };
 
 const onLoadTenant = async () => {
   app$.setActiveFeature('tenant');
