@@ -1,9 +1,9 @@
 import {
   createImplementationNoteCommand,
   type CommandResult,
-  type ImplementationNoteCreateCommand,
 } from '@/Core/Models/nrg-dtos/nrg-dto-ImplementationNoteCreateCommand';
 import type { ImplementationNote } from '@/Core/Models/nrg-dtos/nrg-dto-ImplementationNotesQuery';
+import type { SessionStateResponse } from '@/Core/Models/vintage-auth/nrg-dto-responses';
 
 // ============ Request/Response Types ============
 
@@ -12,10 +12,10 @@ export interface TenantEnvironmentResponse {
 }
 
 export interface TenantLoginRequest {
-  email: string;
-  password: string;
-  recaptchaResponse: string | null;
-  rememberMe: boolean;
+  Email: string;
+  Password: string;
+  RememberMe: boolean;
+  RecaptchaResponse: string | null;
 }
 
 export interface TenantLoginResult {
@@ -90,6 +90,7 @@ export class NrgVintageCalls {
       credentials: 'include',
       headers: {
         ...this.getDefaultHeaders(),
+        ...(this._environment ? { 'environment': this._environment } : {}),
         ...headers,
       },
     });
@@ -107,17 +108,24 @@ export class NrgVintageCalls {
   }
 
   private async post<T>(url: string, body: unknown, headers?: Record<string, string>): Promise<T> {
+    const mergedHeaders: Record<string, string> = {
+      ...this.getDefaultHeaders(),
+      'Content-Type': 'application/json',
+    };
+
+    if (this._environment) {
+      mergedHeaders['environment'] = this._environment;
+    }
+    if (this._requestContext) {
+      mergedHeaders['request-context'] = this._requestContext;
+    }
+
+    Object.assign(mergedHeaders, headers);
+
     const response = await fetch(this._baseUrl + url, {
       method: 'POST',
       credentials: 'include',
-      headers: {
-        ...this.getDefaultHeaders(),
-        'Content-Type': 'application/json',
-        'environment': this._environment,
-        'request-context': this._requestContext,
-        'Referer': this._baseUrl,
-        ...headers,
-      },
+      headers: mergedHeaders,
       body: JSON.stringify(body),
     });
 
@@ -142,10 +150,6 @@ export class NrgVintageCalls {
     const encodedLogin = encodeURIComponent(login);
     const result = await this.get<TenantEnvironmentResponse>(
       `/Account/Auth/EnvironmentForUser?login=${encodedLogin}`,
-      {
-        Host: 'app.innergy.com',
-        Connection: 'Keep-Alive',
-      }
     );
     this._environment = result.Environment;
     return result;
@@ -161,10 +165,10 @@ export class NrgVintageCalls {
     rememberMe: boolean = false
   ): Promise<TenantLoginResult> {
     const request: TenantLoginRequest = {
-      email,
-      password,
-      recaptchaResponse,
-      rememberMe,
+      Email: email,
+      Password: password,
+      RememberMe: rememberMe,
+      RecaptchaResponse: recaptchaResponse,
     };
     return await this.post<TenantLoginResult>('/Account/AuthEndpoint/Login', request);
   }
@@ -180,9 +184,12 @@ export class NrgVintageCalls {
 
   /**
    * Run a command against the tenant portal.
+   * Uses text/plain Content-Type to match the real innergy UI.
    */
   async runCommand<TResponse>(command: TenantQueryRequest): Promise<TResponse> {
-    return await this.post<TResponse>('/command/run', command);
+    return await this.post<TResponse>('/command/run', command, {
+      'Content-Type': 'text/plain;charset=UTF-8',
+    });
   }
 
   // ============ Implementation Notes ============
@@ -198,16 +205,39 @@ export class NrgVintageCalls {
   }
 
   /**
+   * Step 3: Get the app profile / session state after login.
+   * Returns tenant.id (the real innergy company UUID) needed for note creation.
+   */
+  async getAppProfile(): Promise<SessionStateResponse> {
+    const query = encodeURIComponent(JSON.stringify({ $type: 'AppProfileQuery' }));
+    return await this.get<SessionStateResponse>(
+      `/query/run?query=${query}`,
+    );
+  }
+
+  /**
    * Get all implementation notes for the current tenant.
    */
   async getImplementationNotes(): Promise<ImplementationNote[]> {
     const query = encodeURIComponent(JSON.stringify({ $type: 'ImplementationNotesQuery' }));
     return await this.get<ImplementationNote[]>(
       `/query/run?query=${query}`,
-      {
-        environment: this._environment,
-        Host: 'app.innergy.com',
-      }
     );
+  }
+
+  /**
+   * Logout from the tenant portal. Clears server-side auth cookies.
+   */
+  async logout(): Promise<void> {
+    try {
+      await fetch(this._baseUrl + '/account/authEndpoint/logout', {
+        method: 'GET',
+        credentials: 'include',
+        redirect: 'manual',
+        headers: this.getDefaultHeaders(),
+      });
+    } catch {
+      // Logout is best-effort; the 302 response already clears auth cookies
+    }
   }
 }

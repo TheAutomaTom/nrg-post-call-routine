@@ -21,6 +21,9 @@ export const useTenantPostingState = defineStore("TenantPostingState", () => {
     isPosting.value = true;
     lastResult.value = null;
 
+    // Create client outside try so finally can call logout
+    const client = new NrgVintageCalls();
+
     try {
       // Get credentials for this tenant
       const cred = tenantAuth$.getById(tenantId);
@@ -33,9 +36,6 @@ export const useTenantPostingState = defineStore("TenantPostingState", () => {
         lastResult.value = result;
         return result;
       }
-
-      // Create a fresh client for this tenant's session
-      const client = new NrgVintageCalls();
 
       // Step 1: Get environment for tenant login
       await client.getEnvironmentForTenant(cred.name);
@@ -52,8 +52,12 @@ export const useTenantPostingState = defineStore("TenantPostingState", () => {
         return result;
       }
 
-      // Step 3: Post the note
-      const commandResult = await client.createImplementationNote(tenantId, html);
+      // Step 3: Get app profile to retrieve the real innergy tenant/company ID
+      const profile = await client.getAppProfile();
+      const realTenantId = profile.tenant.id;
+
+      // Step 4: Post the note using the real tenant ID from AppProfile
+      const commandResult = await client.createImplementationNote(realTenantId, html);
       if (!commandResult.IsSuccess) {
         const errorMsg = commandResult.KeyMessages?.join(', ')
           || commandResult.OutcomeDescription
@@ -67,7 +71,7 @@ export const useTenantPostingState = defineStore("TenantPostingState", () => {
         return result;
       }
 
-      // Step 4: Verify note was posted by fetching all notes
+      // Step 5: Verify note was posted by fetching all notes
       const notes = await client.getImplementationNotes();
       const recentNote = notes.find(n => n.body.includes(html.substring(0, 50)));
 
@@ -90,6 +94,7 @@ export const useTenantPostingState = defineStore("TenantPostingState", () => {
       lastResult.value = result;
       return result;
     } finally {
+      await client.logout();
       isPosting.value = false;
     }
   };
