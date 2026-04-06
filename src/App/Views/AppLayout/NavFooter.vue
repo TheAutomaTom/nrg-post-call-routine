@@ -14,8 +14,9 @@
 
         </template>
 
-        <TenantFooterButtons
-          v-if="app$.ActiveFeature === 'tenant' || (app$.ActiveFeature === null && isTenant)" />
+        <TenantFooterButtons/>
+        <!-- <TenantFooterButtons
+          v-if="app$.ActiveFeature === 'tenant' || (app$.ActiveFeature === null && isTenant)" /> -->
 
         <!-- ==== Right Justified ======================================================================= -->
       </div>
