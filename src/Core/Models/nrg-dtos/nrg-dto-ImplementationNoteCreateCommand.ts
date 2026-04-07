@@ -2,6 +2,7 @@
 
 export interface ImplementationNoteCreateCommand {
   $type: 'ImplementationNoteCreateCommand';
+  Id: string;       // Client-generated UUID for this note
   Body: string;     // HTML content of the note
 }
 
@@ -26,10 +27,23 @@ export interface CommandMessage {
 // ============ Factory Functions ============
 
 export function createImplementationNoteCommand(
-  body: string
+  body: string,
+  id: string,
 ): ImplementationNoteCreateCommand {
   return {
     $type: 'ImplementationNoteCreateCommand',
+    Id: id,
     Body: body,
   };
+}
+
+/**
+ * Generate a UUID that does not collide with any existing note IDs.
+ */
+export function generateUniqueNoteId(existingIds: Set<string>): string {
+  let id = crypto.randomUUID();
+  while (existingIds.has(id)) {
+    id = crypto.randomUUID();
+  }
+  return id;
 }

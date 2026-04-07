@@ -2,6 +2,7 @@ import { defineStore } from "pinia";
 import { ref } from "vue";
 import { useTenantAuthState } from "@/Core/States/tenant-auth-state";
 import { NrgVintageCalls } from "@/Data/Clients/NrgVintageCalls";
+import { generateUniqueNoteId } from "@/Core/Models/nrg-dtos/nrg-dto-ImplementationNoteCreateCommand";
 
 export interface PostingResult {
   tenantId: string;
@@ -55,8 +56,13 @@ export const useTenantPostingState = defineStore("TenantPostingState", () => {
       // Step 3: Get app profile (validates session is active)
       await client.getAppProfile();
 
-      // Step 4: Post the note with a client-generated UUID
-      const commandResult = await client.createImplementationNote(html);
+      // Step 3.5: Fetch existing notes and generate a unique UUID
+      const existingNotes = await client.getImplementationNotes();
+      const existingIds = new Set(existingNotes.map(n => n.id));
+      const noteId = generateUniqueNoteId(existingIds);
+
+      // Step 4: Post the note with a unique client-generated UUID
+      const commandResult = await client.createImplementationNote(html, noteId);
       if (!commandResult.IsSuccess) {
         const errorMsg = commandResult.KeyMessages?.join(', ')
           || commandResult.OutcomeDescription

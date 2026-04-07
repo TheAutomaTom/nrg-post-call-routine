@@ -54,6 +54,7 @@ const handleNoteSave = async (tenantId: string, html: string) => {
   if (result.success) {
     message.success(result.message);
     tenantUpdate$.addNote(tenantId);
+    tenantUpdate$.markUpdated(tenantId);
     tenantUpdate$.setNoteStatus(tenantId, result.message.includes('verified') ? 'verified' : 'neutral');
   } else {
     message.error(result.message);
