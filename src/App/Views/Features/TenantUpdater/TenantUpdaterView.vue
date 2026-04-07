@@ -83,24 +83,18 @@ const columns: DataTableColumns<TenantUpdateRecord> = [
     width: 100,
   },
   {
-    title: 'Updated',
-    key: 'updatedAt',
-    width: 50,
-    sorter: (a, b) => (a.updatedAt ?? '').localeCompare(b.updatedAt ?? ''),
-    render: (row) => formatDate(row.updatedAt),
-  },
-  {
     title: 'Note',
     key: 'addNote',
-    width: 50,
+    width: 80,
     align: 'center',
+    sorter: (a, b) => (a.updatedAt ?? '').localeCompare(b.updatedAt ?? ''),
     render(row) {
       return h(NButton, {
         size: 'tiny',
         quaternary: true,
         onClick: () => openNoteModal(row),
         title: 'Add Note',
-      }, () => '+');
+      }, () => formatDate(row.updatedAt));
     },
   },
   {
