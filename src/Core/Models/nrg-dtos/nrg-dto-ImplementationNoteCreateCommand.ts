@@ -2,7 +2,6 @@
 
 export interface ImplementationNoteCreateCommand {
   $type: 'ImplementationNoteCreateCommand';
-  Id: string;       // Client-generated UUID for this note
   Body: string;     // HTML content of the note
 }
 
@@ -31,7 +30,6 @@ export function createImplementationNoteCommand(
 ): ImplementationNoteCreateCommand {
   return {
     $type: 'ImplementationNoteCreateCommand',
-    Id: crypto.randomUUID(),
     Body: body,
   };
 }

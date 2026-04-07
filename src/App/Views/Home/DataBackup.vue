@@ -37,6 +37,9 @@
       <li>Frontline Version: 260403-1227</li>
       <li>Server Version: {{ serverVersion || 'Not fetched' }}</li>
       <li>Tenant Auth: {{ tenantAuth$.count }} credential(s)</li>
+      <li>Tenant Updates: {{ tenantUpdate$.records.size }} record(s)</li>
+      <li>API Key: {{ ApiKeyStore.hasValid() ? 'Stored' : 'None' }}</li>
+      <li>Vintage Auth: {{ VintageAuthCache.hasCache() ? 'Cached' : 'None' }}</li>
     </ul>
 
   </div>
@@ -48,14 +51,18 @@ import { ref,  onMounted } from 'vue';
 import { useAppState } from '@/Core/States/app-state';
 import { useModalState } from '@/Core/States/modal-state';
 import { useTenantAuthState } from '@/Core/States/tenant-auth-state';
+import { useTenantUpdateState } from '@/Core/States/tenant-update-state';
 import { TenantInfoCache } from '@/Data/Caches/App/TenantInfoCache';
 import { TenantAuthCache } from '@/Data/Caches/Features/TenantAuthCache';
+import { ApiKeyStore } from '@/Data/Caches/App/ApiKeyStore';
+import { VintageAuthCache } from '@/Data/Caches/App/Vintage/VintageAuthCache';
 import { StringEncryptor } from '@/Core/Features/StringEncryptor';
 
 
 const app$ = useAppState();
 const modal$ = useModalState();
 const tenantAuth$ = useTenantAuthState();
+const tenantUpdate$ = useTenantUpdateState();
 
 const fileInput = ref<HTMLInputElement | null>(null);
 const selectedFile = ref<File | undefined>(undefined);
@@ -90,11 +97,25 @@ function buildBackupPayload() {
     password: StringEncryptor.encrypt(c.password),
   }));
 
+  // Encrypt vintage credentials for backup
+  const vintageAuth = VintageAuthCache.load();
+  const encryptedVintage = vintageAuth
+    ? { email: StringEncryptor.encrypt(vintageAuth.email), password: StringEncryptor.encrypt(vintageAuth.password) }
+    : null;
+
+  // Serialize tenant update records (Map → plain object)
+  const updateRecords: Record<string, unknown> = {};
+  tenantUpdate$.records.forEach((record, key) => {
+    updateRecords[key] = record;
+  });
+
   const payload = {
-    version: 2,
+    version: 3,
     exportedAt: new Date().toISOString(),
     data: {
       tenantInfo: TenantInfoCache.load(),
+      apiKey: ApiKeyStore.loadRaw(),
+      vintageAuth: encryptedVintage,
     },
     stores: {
       app: {
@@ -107,6 +128,9 @@ function buildBackupPayload() {
       },
       tenantAuth: {
         credentials: encryptedCredentials,
+      },
+      tenantUpdate: {
+        records: updateRecords,
       },
     },
   };
@@ -162,7 +186,7 @@ async function importData() {
     const fileContent = await selectedFile.value.text();
     const backup = JSON.parse(fileContent);
 
-    if (backup.version !== 1) {
+    if (![1, 2, 3].includes(backup.version)) {
       throw new Error(`Unsupported backup version: ${backup.version}`);
     }
 
@@ -174,10 +198,6 @@ async function importData() {
     // Restore Pinia stores (versioned)
     const stores = backup.stores ?? backup.data?.stores;
     if (stores) {
-      // Support both old (userConfig) and new (ApiUserConfig) property names
-      const apiConfig = stores.ApiUserConfig ?? stores.userConfig;
-
-
       if (stores.app) {
         app$.ActiveFeature = stores.app.ActiveFeature ?? null;
         app$.AppStatus = stores.app.AppStatus ?? app$.AppStatus;
@@ -201,6 +221,30 @@ async function importData() {
         TenantAuthCache.save(decryptedCredentials);
       }
 
+      // Restore TenantUpdate records (v3+)
+      if (stores.tenantUpdate?.records) {
+        const restoredMap = new Map<string, import('@/Core/Models/tenant-update/TenantUpdateModel').TenantUpdateRecord>();
+        for (const [key, value] of Object.entries(stores.tenantUpdate.records)) {
+          restoredMap.set(key, value as import('@/Core/Models/tenant-update/TenantUpdateModel').TenantUpdateRecord);
+        }
+        tenantUpdate$.records = restoredMap;
+      }
+    }
+
+    // Restore caches (v3+)
+    if (backup.data.apiKey?.key) {
+      const remaining = backup.data.apiKey.expiresAt - Date.now();
+      if (remaining > 0) {
+        ApiKeyStore.save(backup.data.apiKey.key, remaining);
+      }
+    }
+
+    if (backup.data.vintageAuth) {
+      const va = backup.data.vintageAuth;
+      VintageAuthCache.save({
+        email: StringEncryptor.isEncrypted(va.email) ? StringEncryptor.decrypt(va.email) : va.email,
+        password: StringEncryptor.isEncrypted(va.password) ? StringEncryptor.decrypt(va.password) : va.password,
+      });
     }
 
     console.log('[DataBackup] Successfully restored backup data');

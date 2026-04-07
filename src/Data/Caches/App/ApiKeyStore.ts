@@ -43,6 +43,19 @@ export class ApiKeyStore {
     }
   }
 
+  /** Load the full stored payload (key + expiry) without expiration check. */
+  static loadRaw(): StoredApiKey | null {
+    const raw = localStorage.getItem(this.storageKey);
+    if (!raw) return null;
+    try {
+      const payload = JSON.parse(raw) as StoredApiKey | undefined;
+      if (!payload || typeof payload.key !== "string" || typeof payload.expiresAt !== "number") return null;
+      return payload;
+    } catch {
+      return null;
+    }
+  }
+
   /** Remove any stored API key. */
   static clear(): void {
     try {
